@@ -1,0 +1,14 @@
+<div class="button-wrapper">
+  <button mat-fab color="primary" (click)="start()"><mat-icon>play_circle</mat-icon></button>
+  <button mat-fab color="primary" (click)="pause()"><mat-icon>pause_circle</mat-icon></button>
+  <button mat-fab color="primary" (click)="reset()"><mat-icon>restart_alt</mat-icon></button>
+</div>
+
+<app-player-name-input></app-player-name-input>
+<div class="board">
+  <div class="field"></div>
+  <div class="field"></div>
+  <app-ball class="ball" [style.top]="getBallTop" [style.left]="getBallRight"></app-ball>
+  <app-paddle class="paddle paddle-left" [style.top]="getPaddleL"></app-paddle>
+  <app-paddle class="paddle paddle-right" [style.top]="getPaddleR"></app-paddle>
+</div>

@@ -1,0 +1,35 @@
+.board {
+  height: 600px;
+  width: 1200px;
+  position: relative;
+  background-image: linear-gradient(to right, #5c6e91, #839b97);
+  border-radius: 14px;
+  padding: 10px 19px;
+}
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.field {
+  border: black 1px solid;
+  border-collapse: collapse;
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+}
+.ball {
+  position: absolute;
+  top: 285px;
+  left: 585px;
+}
+.paddle {
+  position: absolute;
+  top: 250px;
+}
+
+.paddle-right {
+  right: 10px;
+}
+.paddle-left {
+  left: 10px;
+}
