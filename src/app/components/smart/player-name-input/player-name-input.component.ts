@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SocketService } from 'src/app/services/socket.service';
-import { Player } from '../../../../../../common/game';
+import { Player } from '../../../shared/game';
 import { PlayerService } from 'src/app/services/player.service';
 
 @Component({

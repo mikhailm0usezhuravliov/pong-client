@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Game } from '../../../../common/game';
+import { Game } from '../shared/game';
 import * as socketIo from 'socket.io-client';
 const url = "ws://localhost:3000";
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.service';
-import { Player } from '../../../../../../common/game';
+import { Player } from '../../../shared/game'
 import { filter, fromEvent, iif } from 'rxjs';
 import { KeyCode } from 'src/app/shared/keycodes';
 import { PlayerService } from 'src/app/services/player.service';
