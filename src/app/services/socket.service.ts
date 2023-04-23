@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from '../shared/game';
 import * as socketIo from 'socket.io-client';
+import {environment} from '../../environments/environment'
 const url = "ws://localhost:3000";
 
 @Injectable({
