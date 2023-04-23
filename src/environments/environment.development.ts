@@ -1,3 +1,3 @@
 export const environment = {
-  serviceWorkerApi: 'ws://localhost:3000'
+  serviceWorkerApi: 'https://pong-ws-service.onrender.com'
 };
