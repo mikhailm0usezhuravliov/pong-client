@@ -5,7 +5,8 @@ export interface Game {
   paddleLx: number,
   paddleRx: number,
   playerR:Player,
-  playerL:Player    
+  playerL:Player,
+  goal: ''| 'goalR' | 'goalL'
 }
 export interface Player {
   name: string,

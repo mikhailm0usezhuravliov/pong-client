@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.service';
-import { Player } from '../../../shared/game'
+import { Player } from '../../../shared/game';
 import { filter, fromEvent, iif } from 'rxjs';
 import { KeyCode } from 'src/app/shared/keycodes';
 import { PlayerService } from 'src/app/services/player.service';
@@ -16,7 +16,10 @@ export class BoardComponent implements OnInit {
   private _paddleLx = 250;
   private _paddleRx = 250;
 
+  public boxShadowStyle: '10px 0px red' | '-10px 0px red' | '' = '';
+
   public status: string;
+  public goal: string;
 
   public get getBallTop() {
     return `${this._ballx}px`;
@@ -63,19 +66,14 @@ export class BoardComponent implements OnInit {
           });
         }
       });
-    // fromEvent<KeyboardEvent>(document, 'keydown')
-    //   .pipe(filter((e) => e.code === KeyCode.KeyA || e.code === KeyCode.KeyZ))
-    //   .subscribe((keyEvent) => {
-    //     keyEvent.code == KeyCode.KeyZ
-    //       ? this.socketService.emitToServer('move', {
-    //           user: 'userL',
-    //           direction: 'down',
-    //         })
-    //       : this.socketService.emitToServer('move', {
-    //           user: 'userL',
-    //           direction: 'up',
-    //         });
-    //   });
+    this.socketService.listenToServer('score').subscribe((game) => {
+      this.goal = game.goal;
+      if (game.goal)
+      game.goal == 'goalL'
+        ? (this.boxShadowStyle = '10px 0px red')
+        : (this.boxShadowStyle = '-10px 0px red');
+        setTimeout(()=> {this.boxShadowStyle=''}, 500);
+    });
   }
 
   start() {

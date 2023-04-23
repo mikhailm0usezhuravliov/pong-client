@@ -5,7 +5,7 @@
 </div>
 
 <app-player-name-input></app-player-name-input>
-<div class="board">
+<div class="board" [style.box-shadow]="boxShadowStyle" >
   <div class="field"></div>
   <div class="field"></div>
   <app-ball class="ball" [style.top]="getBallTop" [style.left]="getBallRight"></app-ball>
