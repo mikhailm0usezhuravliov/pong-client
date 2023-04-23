@@ -1,3 +1,3 @@
 export const environment = {
-  serviceWorkerApi: 'https://pong-game-service.onrender.com:3000'
+  serviceWorkerApi: 'https://pong-ws-service.onrender.com:3000'
 };
