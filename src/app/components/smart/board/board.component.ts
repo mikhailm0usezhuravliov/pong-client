@@ -4,6 +4,7 @@ import { GameEvents, Player } from '../../../shared/game';
 import { filter, fromEvent, iif } from 'rxjs';
 import { KeyCode } from 'src/app/shared/keycodes';
 import { PlayerService } from 'src/app/services/player.service';
+import { Paddle } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-board',
@@ -13,8 +14,8 @@ import { PlayerService } from 'src/app/services/player.service';
 export class BoardComponent implements OnInit {
   private _ballx = 285;
   private _bally = 585;
-  private _paddleLx = 250;
-  private _paddleRx = 250;
+  private _paddleL: Paddle = { x: 250, y: 0 };
+  private _paddleR: Paddle = { x: 250, y: 0 };
 
   public boxShadowStyle: '10px 0px red' | '-10px 0px red' | '' = '';
 
@@ -28,10 +29,10 @@ export class BoardComponent implements OnInit {
     return `${this._bally}px`;
   }
   public get getPaddleL() {
-    return `${this._paddleLx}px`;
+    return `${this._paddleL.x}px`;
   }
   public get getPaddleR() {
-    return `${this._paddleRx}px`;
+    return `${this._paddleR.x}px`;
   }
 
   constructor(
@@ -48,8 +49,8 @@ export class BoardComponent implements OnInit {
       this.status = game.status;
     });
     this.socketService.listenToServer(GameEvents.move).subscribe((game) => {
-      this._paddleLx = game.paddleLx;
-      this._paddleRx = game.paddleRx;
+      this._paddleL.x = game.paddleLx;
+      this._paddleR.x = game.paddleRx;
     });
 
     fromEvent<KeyboardEvent>(document, 'keydown')

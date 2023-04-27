@@ -8,3 +8,7 @@ export enum Move {
   MoveDown = 'moveDown',
 }
 
+export interface Paddle {
+  x: number;
+  y: number;
+}
