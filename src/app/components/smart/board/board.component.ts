@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.service';
-import { Player } from '../../../shared/game';
+import { GameEvents, Player } from '../../../shared/game';
 import { filter, fromEvent, iif } from 'rxjs';
 import { KeyCode } from 'src/app/shared/keycodes';
 import { PlayerService } from 'src/app/services/player.service';
@@ -40,14 +40,14 @@ export class BoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.socketService.listenToServer('game').subscribe((game) => {
+    this.socketService.listenToServer(GameEvents.game).subscribe((game) => {
       this._ballx = game.ballX;
       this._bally = game.ballY;
     });
-    this.socketService.listenToServer('status').subscribe((game) => {
+    this.socketService.listenToServer(GameEvents.status).subscribe((game) => {
       this.status = game.status;
     });
-    this.socketService.listenToServer('move').subscribe((game) => {
+    this.socketService.listenToServer(GameEvents.move).subscribe((game) => {
       this._paddleLx = game.paddleLx;
       this._paddleRx = game.paddleRx;
     });
@@ -60,29 +60,31 @@ export class BoardComponent implements OnInit {
       )
       .subscribe((keyEvent) => {
         if (this.playerService.playerValue !== '') {
-          this.socketService.emitToServer('move', {
+          this.socketService.emitToServer(GameEvents.move, {
             player: this.playerService.playerValue,
             direction: keyEvent.code,
           });
         }
       });
-    this.socketService.listenToServer('score').subscribe((game) => {
+    this.socketService.listenToServer(GameEvents.score).subscribe((game) => {
       this.goal = game.goal;
       if (game.goal)
-      game.goal == 'goalL'
-        ? (this.boxShadowStyle = '10px 0px red')
-        : (this.boxShadowStyle = '-10px 0px red');
-        setTimeout(()=> {this.boxShadowStyle=''}, 500);
+        game.goal == 'goalL'
+          ? (this.boxShadowStyle = '10px 0px red')
+          : (this.boxShadowStyle = '-10px 0px red');
+      setTimeout(() => {
+        this.boxShadowStyle = '';
+      }, 500);
     });
   }
 
   start() {
-    this.socketService.emitToServer('start');
+    this.socketService.emitToServer(GameEvents.start);
   }
   pause() {
-    this.socketService.emitToServer('pause');
+    this.socketService.emitToServer(GameEvents.pause);
   }
   reset() {
-    this.socketService.emitToServer('reset');
+    this.socketService.emitToServer(GameEvents.reset);
   }
 }
