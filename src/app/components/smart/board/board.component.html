@@ -5,10 +5,12 @@
 </div>
 
 <app-player-name-input></app-player-name-input>
-<div class="board" [style.box-shadow]="boxShadowStyle" >
+<div class="board" *ngIf="boardStyles$ | async" [ngClass]="{'goal-left':goalL,'goal-right':goalR}" [style]="boardStyle">
   <div class="field"></div>
   <div class="field"></div>
-  <app-ball class="ball" [style.top]="getBallTop" [style.left]="getBallRight"></app-ball>
-  <app-paddle class="paddle paddle-left" [style.top]="getPaddleL"></app-paddle>
-  <app-paddle class="paddle paddle-right" [style.top]="getPaddleR"></app-paddle>
+  <app-ball class="ball" *ngIf="ball$ | async" [diameter]="ballDiameter" [style]="ballPosition"></app-ball>
+  <app-paddle *ngIf="paddleState$ | async as paddles" class="paddle paddle-left"
+    [style.top]="paddles.paddleL.x+'px'"></app-paddle>
+  <app-paddle *ngIf="paddleState$ | async as paddles" class="paddle paddle-right"
+    [style.top]="paddles.paddleR.x+'px'"></app-paddle>
 </div>

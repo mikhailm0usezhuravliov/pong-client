@@ -18,40 +18,14 @@ export class PlayerNameInputComponent implements OnInit {
   public playerL: Player;
   public playerR: Player;
 
-  _currentPlayer: 'playerR' | 'playerL' | '';
+  _currentPlayer: 'playerR' | 'playerL';
   constructor(
     private socketService: SocketService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+
   ) {}
 
   ngOnInit(): void {
-    // this.playerRName.valueChanges.subscribe((value) => {
-    //   if (value) {
-    //     this.playerLName.disable({ emitEvent: false });
-    //     this._currentPlayer = 'playerR';
-    //   } else {
-    //     this._currentPlayer = '';
-    //     this.playerLName.enable({ emitEvent: false });
-    //   }
-    //   this.playerService.setPlayer('playerR');
-    //   this.socketService.emitToServer(GameEvents.setPlayer, {
-    //     player: 'playerR',
-    //     name: value,
-    //   });
-    // });
-    // this.playerLName.valueChanges.subscribe((value) => {
-    //   if (value) {
-
-    //   } else {
-    //     this._currentPlayer = '';
-    //     this.playerRName.enable({ emitEvent: false });
-    //   }
-    //   this.playerService.setPlayer('playerL');
-    //   this.socketService.emitToServer(GameEvents.setPlayer, {
-    //     player: 'playerL',
-    //     name: value,
-    //   });
-    // });
     merge(
       this.playerRName.valueChanges.pipe(
         tap(() => {

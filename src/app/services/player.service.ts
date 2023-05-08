@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Player } from '../shared/game';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlayerService {
-  private _player = new BehaviorSubject('');
-  public player: Observable<string>;
+  private _player = new BehaviorSubject<'playerL' | 'playerR' | null>(null);
+  public player: Observable<'playerL' | 'playerR' | null>;
   public get playerValue () {
     return this._player.getValue()
   };
@@ -15,7 +14,7 @@ export class PlayerService {
   constructor() {
     this.player = this._player.asObservable();
   }
-  setPlayer(player: string) {
+  setPlayer(player: 'playerL' | 'playerR') {
     this._player.next(player);
   }
 }

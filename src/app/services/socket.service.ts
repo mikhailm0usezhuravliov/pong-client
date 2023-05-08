@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Game, GameEvents } from '../shared/game';
 import * as socketIo from 'socket.io-client';
 import { environment } from '../../environments/environment';
-const url = 'ws://localhost:3000';
+
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class SocketService {
     this.clientSocket = socketIo.connect(environment.serviceWorkerApi);
   }
 
-  listenToServer(gameEvents: GameEvents): Observable<Game> {
+  listenToServer(gameEvents: GameEvents): Observable<any> {
     return new Observable((subscribe) => {
       this.clientSocket.on(gameEvents, (data: Game) => {
         subscribe.next(data);

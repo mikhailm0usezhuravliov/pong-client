@@ -1,9 +1,10 @@
+import { Paddle, Ball } from './interfaces';
+
 export interface Game {
   status: 'action' | 'pause' | 'not ready';
-  ballX: number;
-  ballY: number;
-  paddleLx: number;
-  paddleRx: number;
+  ball: Ball;
+  paddleL: Paddle;
+  paddleR: Paddle;
   playerR: Player;
   playerL: Player;
   goal: '' | 'goalR' | 'goalL';

@@ -1,10 +1,16 @@
 .board {
-  height: 600px;
-  width: 1200px;
+  // height: 600px;
+  // width: 1200px;
   position: relative;
   background-image: linear-gradient(to right, #5c6e91, #839b97);
   border-radius: 14px;
   padding: 10px 19px;
+  &.goal-left {
+    box-shadow: 10px 0px red;
+  }
+  &.goal-right {
+    box-shadow: -10px 0px red;
+  }
 }
 .button-wrapper {
   display: flex;
@@ -19,12 +25,9 @@
 }
 .ball {
   position: absolute;
-  top: 285px;
-  left: 585px;
 }
 .paddle {
   position: absolute;
-  top: 250px;
 }
 
 .paddle-right {

@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
     PaddleComponent,
     MatButtonModule,
     PlayerNameInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   exports: [BoardComponent],
 })
