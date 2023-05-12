@@ -1,10 +1,19 @@
 export interface PaddleMove {
   player: 'playerL' | 'playerR';
-  moveDirection: Move;
+  direction: Move;
 }
+export interface Paddle {
+  x: number;
+  y: number;
+}
+export interface Ball {
+  x: number;
+  y: number;
+}
+
+
 
 export enum Move {
-  MoveUp = 'moveUp',
-  MoveDown = 'moveDown',
+  ArrowUp = 'ArrowUp',
+  ArrowDown = 'ArrowDown',
 }
-

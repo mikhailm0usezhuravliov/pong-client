@@ -1,4 +1,13 @@
-.inpust-wrapper {
+@import "../../../../variables";
+
+.inputs-wrapper {
   display: flex;
   justify-content: space-between;
+  .field-wrapper {
+    min-width: 212px;
+    background-color: $primary;
+    h1 {
+      font-size: 40px;
+    }
+  }
 }

@@ -7,10 +7,10 @@ import { Component, Input } from '@angular/core';
   standalone: true,
 })
 export class BallComponent {
-  @Input() diametr: number;
+  @Input() diameter: number;
 
   get getDiametr() {
-    return `${this.diametr ? this.diametr :30}px`
+    return `${this.diameter ? this.diameter :30}px`
   }
 
 }
