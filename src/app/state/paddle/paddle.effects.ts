@@ -1,9 +1,7 @@
-import { Store } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AppState } from '../app.state';
 import { SocketService } from 'src/app/services/socket.service';
-import { movePaddle, changeSatePaddle } from './paddle.actions';
-import { tap, switchMap, map } from 'rxjs';
+import { movePaddle, changeStatePaddle } from './paddle.actions';
+import { tap, map } from 'rxjs';
 import { GameEvents } from 'src/app/shared/game';
 import { Injectable } from '@angular/core';
 
@@ -29,7 +27,7 @@ export class PaddleEffects {
       .listenToServer(GameEvents.move)
       .pipe(
         map((data) =>
-          changeSatePaddle({ player: data.player, paddle: data[data.player === 'playerR' ? 'paddleR' : 'paddleL'] })
+        changeStatePaddle({ player: data.player, paddle: data[data.player === 'playerR' ? 'paddleR' : 'paddleL'] })
         )
       )
   );

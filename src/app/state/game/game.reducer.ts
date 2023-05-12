@@ -1,15 +1,18 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { Player } from 'src/app/shared/game';
-import { pauseGame, resetGame, scoreGame, startGame } from './game.actions';
+import {
+  pauseGame,
+  resetGame,
+  scoreGame,
+  loadConfig,
+  setPlayerName,
+  setCurrentPlayer,
+} from './game.actions';
 
 export interface GameConfig {
   boardHeight: number;
   boardWidth: number;
-  ball: {
-    x: number;
-    y: number;
-  };
   paddleLx: number;
   paddleRx: number;
   paddleHeight: number;
@@ -23,6 +26,7 @@ export interface GameConfig {
 
 export interface GameState {
   status: 'action' | 'pause' | 'not ready';
+  player: 'playerR' | 'playerL' | '';
   playerL: Player;
   playerR: Player;
   goal: '' | 'goalR' | 'goalL';
@@ -31,16 +35,13 @@ export interface GameState {
 
 export const InitialGameState: GameState = {
   status: 'not ready',
+  player: '',
   playerL: { name: '', score: 0 },
   playerR: { name: '', score: 0 },
   goal: '',
   config: {
     boardHeight: 600,
     boardWidth: 1200,
-    ball: {
-      x: 285,
-      y: 585,
-    },
     paddleLx: 250,
     paddleRx: 250,
     paddleHeight: 100,
@@ -56,12 +57,32 @@ export const InitialGameState: GameState = {
 export const gameReducer = createReducer(
   // Supply the initial state
   InitialGameState,
-  on(startGame, (state) => ({ ...state })),
-  on(scoreGame, (state, { playerL, playerR }) => ({
-    ...state,
-    playerL: playerL,
-    playerR: playerR,
-  })),
+  on(loadConfig, (state, config) => ({ ...state, config: config })),
+
+  on(setPlayerName, (state, { player, name }) => {
+    let temPlayer: Player = { ...state[player] };
+    temPlayer.name = name;
+    return {
+      ...state,
+      [player]: temPlayer,
+    };
+  }),
+
+  on(setCurrentPlayer, (state, { player }) => {
+    return {
+      ...state,
+      player: player,
+    };
+  }),
+
+  on(scoreGame, (state, { goal, playerL, playerR }) => {
+    return {
+      ...state,
+      goal: goal,
+      playerL: playerL,
+      playerR: playerR,
+    };
+  }),
   on(pauseGame, (state) => ({ ...state, status: 'pause' })),
   on(resetGame, (state) => ({ ...state, status: 'not ready' }))
 );

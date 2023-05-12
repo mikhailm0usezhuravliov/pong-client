@@ -9,7 +9,21 @@ export const selectGameState = createSelector(
 );
 
 export const selectConfig = (state: AppState) => state.game;
+
 export const selectGameConfig = createSelector(
   selectConfig,
   (state: GameState) => state.config
+);
+
+export const selectGameStatus = createSelector(
+  selectConfig,
+  (state: GameState) => {
+    return {
+      goal: state.goal,
+      status: state.status,
+      player: state.player,
+      playerL: state.playerL,
+      playerR: state.playerR,
+    };
+  }
 );

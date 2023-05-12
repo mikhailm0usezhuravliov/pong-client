@@ -21,6 +21,7 @@ export enum GameEvents {
   move = 'move',
   start = 'start',
   setPlayer = 'setPlayer',
+  loadConfig = 'loadConfig',
   pause = 'pause',
   reset = 'reset',
   connected = 'connected',

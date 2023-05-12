@@ -1,52 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { SocketService } from 'src/app/services/socket.service';
-import { GameEvents, Player } from '../../../shared/game';
-import { filter, fromEvent, iif, tap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, filter, fromEvent, iif, map, tap } from 'rxjs';
 import { KeyCode } from 'src/app/shared/keycodes';
-import { PlayerService } from 'src/app/services/player.service';
 import { Move } from 'src/app/shared/interfaces';
 import { Store } from '@ngrx/store';
 import { movePaddle } from 'src/app/state/paddle/paddle.actions';
 import { selectPaddlesState } from 'src/app/state/paddle/paddle.selector';
 import { AppState } from 'src/app/state/app.state';
 import { selectBallState } from 'src/app/state/ball/ball.selectors';
-import { selectGameConfig } from 'src/app/state/game/game.selectors';
+import {
+  selectGameConfig,
+  selectGameStatus,
+} from 'src/app/state/game/game.selectors';
+import {
+  pauseGame,
+  resetGame,
+  startGame,
+} from 'src/app/state/game/game.actions';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   public paddleState$ = this.store.select(selectPaddlesState);
   public ball$ = this.store.select(selectBallState);
   public config$ = this.store.select(selectGameConfig);
-
-  public status: string;
-  public goalR: boolean = false;
-  public goalL: boolean = false;
-
-  public ballDiameter: number;
+  public boardStyles$;
   public boardStyle: Record<string, string | undefined | null>;
   public ballPosition: Record<string, string | undefined | null>;
 
-  public boardStyles$;
+  public goals: string[] = [];
+  public player: '' | 'playerR' | 'playerL';
+  private _goals$ = this.store.select(selectGameStatus).pipe(
+    tap((game) => {
+      this.player = game.player;
+      this.goals.push(game.goal == 'goalR' ? 'goal-right' : '');
+      this.goals.push(game.goal == 'goalL' ? 'goal-left' : '');
+      setTimeout(() => {
+        this.goals.pop();
+      }, 300);
+    })
+  );
+  private _subscribtions$: Subscription[] = [];
 
-  constructor(
-    private socketService: SocketService,
-    private playerService: PlayerService,
-    private store: Store<AppState>
-  ) {
+  constructor(private store: Store<AppState>) {
     this.boardStyles$ = this.config$.pipe(
       tap((data) => {
         this.boardStyle = {
           width: `${data.boardWidth}px`,
           height: `${data.boardHeight}px`,
         };
-        this.ballDiameter = data.ballDiameter;
+        this.boardStyle;
         this.ballPosition = {
-          top: `${data.ball.x}px`,
-          left: `${data.ball.y}px`,
+          top: `${data.boardHeight / 2 - data.ballDiameter / 2}px`,
+          left: `${data.boardWidth / 2 - data.ballDiameter / 2}px`,
         };
       })
     );
@@ -59,49 +67,40 @@ export class BoardComponent implements OnInit {
       })
     );
   }
+  ngOnDestroy(): void {
+    this._subscribtions$.forEach((s) => s.unsubscribe());
+  }
 
   ngOnInit(): void {
-    this.socketService.listenToServer(GameEvents.status).subscribe((game) => {
-      this.status = game.status;
-    });
-
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(
-          (keyEvent) =>
-            keyEvent.code === KeyCode.ArrowDown ||
-            keyEvent.code === KeyCode.ArrowUp
+    this._subscribtions$.push(
+      fromEvent<KeyboardEvent>(document, 'keydown')
+        .pipe(
+          map((keyEvent) => keyEvent.code),
+          filter(
+            (code) => code === KeyCode.ArrowDown || code === KeyCode.ArrowUp
+          )
         )
-      )
-      .subscribe((keyEvent) => {
-        if (this.playerService.playerValue !== null) {
-          this.store.dispatch(
-            movePaddle({
-              player: this.playerService.playerValue,
-              direction: Move[keyEvent.code as keyof typeof Move],
-            })
-          );
-        }
-      });
-
-    this.socketService.listenToServer(GameEvents.score).subscribe((game) => {
-      this.goalL = game.goal === 'goalL';
-      this.goalR = game.goal === 'goalR';
-
-      setTimeout(() => {
-        this.goalL = false;
-        this.goalR = false;
-      }, 500);
-    });
+        .subscribe((code) => {
+          if (this.player) {
+            this.store.dispatch(
+              movePaddle({
+                player: this.player,
+                direction: Move[code as keyof typeof Move],
+              })
+            );
+          }
+        })
+    );
+    this._subscribtions$.push(this._goals$.subscribe());
   }
 
   start() {
-    this.socketService.emitToServer(GameEvents.start);
+    this.store.dispatch(startGame());
   }
   pause() {
-    this.socketService.emitToServer(GameEvents.pause);
+    this.store.dispatch(pauseGame());
   }
   reset() {
-    this.socketService.emitToServer(GameEvents.reset);
+    this.store.dispatch(resetGame());
   }
 }

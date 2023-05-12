@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { Move, Paddle } from 'src/app/shared/interfaces';
-import { movePaddle, changeSatePaddle } from './paddle.actions';
+import { movePaddle, changeStatePaddle } from './paddle.actions';
 
 export interface PaddleState {
   paddleL: Paddle;
@@ -41,7 +41,7 @@ export const paddleReducer = createReducer(
       [player === 'playerR' ? 'paddleR' : 'paddleL']: { x: x, y: 0 },
     };
   }),
-  on(changeSatePaddle, (state, { player, paddle }) => {
+  on(changeStatePaddle, (state, { player, paddle }) => {
     return {
       ...state,
       [player === 'playerR' ? 'paddleR' : 'paddleL']: paddle,

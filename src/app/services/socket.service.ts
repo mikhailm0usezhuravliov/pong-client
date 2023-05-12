@@ -4,12 +4,11 @@ import { Game, GameEvents } from '../shared/game';
 import * as socketIo from 'socket.io-client';
 import { environment } from '../../environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  // private clientSocket: SocketService.Socket;
+
   private clientSocket;
 
   constructor() {

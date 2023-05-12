@@ -5,7 +5,7 @@ export const movePaddle = createAction(
   '[board component] Move paddle',
   props<PaddleMove>()
 );
-export const changeSatePaddle = createAction(
+export const changeStatePaddle = createAction(
   '[board component] paddle',
   props<{ player: string, paddle: Paddle; }>()
 );
